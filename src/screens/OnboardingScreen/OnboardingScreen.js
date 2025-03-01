@@ -1,66 +1,88 @@
-import React, { useRef, useState } from 'react';
-import { View, FlatList, Animated, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
-import { useTheme } from '../../context/ThemeContext';
+import React, {useRef, useState} from 'react';
+import {
+  View,
+  FlatList,
+  Animated,
+  Dimensions,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native';
+import {useTheme} from '../../context/ThemeContext';
 import Text from '../../components/atoms/Text/Text';
-import { getStyles } from './OnboardingScreen.styles';
-import { onboardingData } from './onboardingData';
+import {getStyles} from './OnboardingScreen.styles';
+import {onboardingData} from './onboardingData';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 
-const OnboardingScreen = ({ navigation }) => {
-  const { theme } = useTheme();
+const OnboardingScreen = ({navigation, onOnboardingComplete}) => {
+  const {theme} = useTheme();
   const styles = getStyles(theme);
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
   const slidesRef = useRef(null);
 
-  const viewableItemsChanged = useRef(({ viewableItems }) => {
+  const viewableItemsChanged = useRef(({viewableItems}) => {
     if (viewableItems[0]) {
       setCurrentIndex(viewableItems[0].index);
     }
   }).current;
 
-  const viewConfig = useRef({ viewAreaCoveragePercentThreshold: 50 }).current;
+  const viewConfig = useRef({viewAreaCoveragePercentThreshold: 50}).current;
 
   // Görsel placeholder oluşturucu
-  const renderPlaceholderImage = (index) => {
+  const renderPlaceholderImage = index => {
     const colors = ['#5E72E4', '#FF5678', '#3EC1D3'];
     const icons = [
-      { 
-        title: 'CHALLENGE', 
+      {
+        title: 'CHALLENGE',
         subtitle: 'HER GÜN YENİ BİR ADIM',
-        description: 'Günlük, haftalık veya aylık hedefler belirleyin ve ilerlemelerinizi takip edin'
+        description:
+          'Günlük, haftalık veya aylık hedefler belirleyin ve ilerlemelerinizi takip edin',
       },
-      { 
-        title: 'KATILIM', 
+      {
+        title: 'KATILIM',
         subtitle: 'BİRLİKTE BAŞARIN',
-        description: 'Arkadaşlarınızla birlikte çalışın, yorumlar yapın ve birbirinizi motive edin'
+        description:
+          'Arkadaşlarınızla birlikte çalışın, yorumlar yapın ve birbirinizi motive edin',
       },
-      { 
-        title: 'KEŞFET', 
+      {
+        title: 'KEŞFET',
         subtitle: 'İLHAM ALIN',
-        description: 'Popüler challengeları keşfedin ve kendi tarzınıza uygun etkinlikler bulun'
-      }
+        description:
+          'Popüler challengeları keşfedin ve kendi tarzınıza uygun etkinlikler bulun',
+      },
     ];
-    
+
     const icon = icons[index % icons.length];
-    
+
     return (
       <View
         style={[
           localStyles.placeholderImage,
-          { backgroundColor: colors[index % colors.length] }
-        ]}
-      >
+          {backgroundColor: colors[index % colors.length]},
+        ]}>
         <View style={localStyles.placeholderContent}>
-          <Text variant="h2" color="#FFFFFF" align="center" style={localStyles.placeholderTitle}>
+          <Text
+            variant="h2"
+            color="#FFFFFF"
+            align="center"
+            style={localStyles.placeholderTitle}>
             {icon.title}
           </Text>
-          <Text variant="body" color="#FFFFFF" align="center" style={localStyles.placeholderSubtitle}>
+          <Text
+            variant="body"
+            color="#FFFFFF"
+            align="center"
+            style={localStyles.placeholderSubtitle}>
             {icon.subtitle}
           </Text>
           <View style={localStyles.divider} />
-          <Text variant="caption" color="#FFFFFF" align="center" style={localStyles.placeholderDescription}>
+          <Text
+            variant="caption"
+            color="#FFFFFF"
+            align="center"
+            style={localStyles.placeholderDescription}>
             {icon.description}
           </Text>
         </View>
@@ -69,7 +91,7 @@ const OnboardingScreen = ({ navigation }) => {
   };
 
   // İyileştirilmiş slide komponenti
-  const renderItem = ({ item, index }) => (
+  const renderItem = ({item, index}) => (
     <View style={localStyles.slide}>
       <View style={localStyles.imageContainer}>
         {/* Gerçek görsel yoksa placeholder göster */}
@@ -85,6 +107,20 @@ const OnboardingScreen = ({ navigation }) => {
       </View>
     </View>
   );
+
+  const handleGetStarted = async () => {
+    // Onboarding'i tamamladığını AppNavigator'a bildir
+    if (onOnboardingComplete) {
+      await onOnboardingComplete();
+    }
+  };
+
+  const handleSkip = async () => {
+    // Onboarding'i atladığını AppNavigator'a bildir
+    if (onOnboardingComplete) {
+      await onOnboardingComplete();
+    }
+  };
 
   return (
     <View style={[styles.container, localStyles.container]}>
@@ -108,7 +144,7 @@ const OnboardingScreen = ({ navigation }) => {
       />
 
       <View style={localStyles.skipContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+        <TouchableOpacity onPress={handleSkip}>
           <Text variant="button" color={theme.colors.primary}>
             Atla
           </Text>
@@ -122,10 +158,10 @@ const OnboardingScreen = ({ navigation }) => {
         showsHorizontalScrollIndicator={false}
         pagingEnabled
         bounces={false}
-        keyExtractor={(item) => item.id}
+        keyExtractor={item => item.id}
         onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: false }
+          [{nativeEvent: {contentOffset: {x: scrollX}}}],
+          {useNativeDriver: false},
         )}
         scrollEventThrottle={32}
         onViewableItemsChanged={viewableItemsChanged}
@@ -136,29 +172,29 @@ const OnboardingScreen = ({ navigation }) => {
       <View style={localStyles.paginationContainer}>
         {onboardingData.map((_, i) => {
           const inputRange = [(i - 1) * width, i * width, (i + 1) * width];
-          
+
           const dotWidth = scrollX.interpolate({
             inputRange,
             outputRange: [10, 20, 10],
             extrapolate: 'clamp',
           });
-          
+
           const opacity = scrollX.interpolate({
             inputRange,
             outputRange: [0.3, 1, 0.3],
             extrapolate: 'clamp',
           });
-          
+
           return (
             <Animated.View
               key={i}
               style={[
                 localStyles.dot,
-                { 
+                {
                   width: dotWidth,
                   opacity,
-                  backgroundColor: theme.colors.primary 
-                }
+                  backgroundColor: theme.colors.primary,
+                },
               ]}
             />
           );
@@ -167,20 +203,10 @@ const OnboardingScreen = ({ navigation }) => {
 
       <View style={localStyles.buttonContainer}>
         <TouchableOpacity
-          style={[
-            localStyles.button,
-            { backgroundColor: theme.colors.primary }
-          ]}
-          onPress={() => {
-            if (currentIndex < onboardingData.length - 1) {
-              slidesRef.current?.scrollToIndex({ index: currentIndex + 1 });
-            } else {
-              navigation.navigate('Main');
-            }
-          }}
-        >
+          style={[localStyles.button, {backgroundColor: theme.colors.primary}]}
+          onPress={handleGetStarted}>
           <Text variant="button" color="#FFFFFF">
-            {currentIndex === onboardingData.length - 1 ? "Başla" : "İleri"}
+            {currentIndex === onboardingData.length - 1 ? 'Başla' : 'İleri'}
           </Text>
         </TouchableOpacity>
       </View>
@@ -232,7 +258,7 @@ const localStyles = StyleSheet.create({
     alignItems: 'center',
     elevation: 5,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
+    shadowOffset: {width: 0, height: 2},
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
   },
@@ -297,10 +323,10 @@ const localStyles = StyleSheet.create({
     justifyContent: 'center',
     elevation: 3,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: {width: 0, height: 1},
     shadowOpacity: 0.22,
     shadowRadius: 2.22,
   },
 });
 
-export default OnboardingScreen; 
+export default OnboardingScreen;
