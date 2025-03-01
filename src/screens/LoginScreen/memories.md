@@ -30,6 +30,11 @@
 - 📝 Nedeni: Beyaz/açık arka plana karşı metinlerin görünürlüğünü artırmak
 - 🎯 Sonuç: Koyu gri (#333333) renkli, kalın font ağırlıklı metinler
 
+### Güncelleme 5
+- 🔄 Yapılan Değişiklik: Giriş butonları düzeltildi
+- 📝 Nedeni: Butonların HomeScreen'e doğru yönlendirme yapması için
+- 🎯 Sonuç: Giriş butonlarına basıldığında Main navigator'daki Home ekranına doğru yönlendirme
+
 ## Özellikler
 - Email ve şifre girişi
 - Şifre göster/gizle toggle
@@ -45,4 +50,5 @@
 
 ## Bağlantılar
 - Register ekranına geçiş linki
-- Ana ekrana başarılı giriş sonrası yönlendirme 
+- Ana ekrana başarılı giriş sonrası yönlendirme
+- Ana ekrana yönlendirmede navigation.reset kullanılarak geçmiş temizleniyor 

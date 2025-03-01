@@ -6,11 +6,21 @@ import {useTheme} from '../context/ThemeContext';
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = () => {
+const AuthNavigator = ({setLoginStatus}) => {
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
-      <Stack.Screen name="Login" component={LoginScreen} />
-      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen
+        name="Login"
+        children={props => (
+          <LoginScreen {...props} setLoginStatus={setLoginStatus} />
+        )}
+      />
+      <Stack.Screen
+        name="Register"
+        children={props => (
+          <RegisterScreen {...props} setLoginStatus={setLoginStatus} />
+        )}
+      />
     </Stack.Navigator>
   );
 };

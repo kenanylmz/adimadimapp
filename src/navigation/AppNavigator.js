@@ -45,6 +45,22 @@ const AppNavigator = () => {
     checkAppState();
   }, []);
 
+  // Kullanıcı girişi durumunu güncelleme fonksiyonu
+  const setLoginStatus = async status => {
+    try {
+      if (status) {
+        // Login başarılı olduğunda
+        await AsyncStorage.setItem('user', 'logged-in');
+      } else {
+        // Logout olduğunda
+        await AsyncStorage.removeItem('user');
+      }
+      setIsLoggedIn(status);
+    } catch (error) {
+      console.error('Failed to update login status:', error);
+    }
+  };
+
   // OnboardingScreen'e geçtiğimiz props
   const onboardingProps = {
     onOnboardingComplete: async () => {
@@ -75,7 +91,12 @@ const AppNavigator = () => {
       ) : isLoggedIn ? (
         <Stack.Screen name="Main" component={MainNavigator} />
       ) : (
-        <Stack.Screen name="Auth" component={AuthNavigator} />
+        <Stack.Screen
+          name="Auth"
+          children={props => (
+            <AuthNavigator {...props} setLoginStatus={setLoginStatus} />
+          )}
+        />
       )}
     </Stack.Navigator>
   );

@@ -35,6 +35,11 @@
 - 📝 Nedeni: Beyaz/açık arka plana karşı metinlerin görünürlüğünü artırmak
 - 🎯 Sonuç: Koyu gri (#333333) renkli, kalın font ağırlıklı metinler
 
+### Güncelleme 6
+- 🔄 Yapılan Değişiklik: Kayıt butonları düzeltildi
+- 📝 Nedeni: Butonların HomeScreen'e doğru yönlendirme yapması için
+- 🎯 Sonuç: Kayıt butonlarına basıldığında Main navigator'daki Home ekranına doğru yönlendirme
+
 ## Özellikler
 - Ad-soyad, email ve şifre girişi
 - Şifre doğrulama alanı
@@ -51,3 +56,4 @@
 ## Bağlantılar
 - Login ekranına geçiş linki
 - Ana ekrana başarılı kayıt sonrası yönlendirme 
+- Ana ekrana yönlendirmede navigation.reset kullanılarak geçmiş temizleniyor 

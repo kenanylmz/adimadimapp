@@ -108,8 +108,22 @@ const OnboardingScreen = ({navigation, onOnboardingComplete}) => {
     </View>
   );
 
+  // Slide'ı programatik olarak değiştirmek için bu fonksiyonu ekleyelim
+  const goToNextSlide = () => {
+    const nextSlideIndex = currentIndex + 1;
+    if (nextSlideIndex < onboardingData.length) {
+      slidesRef.current.scrollToIndex({
+        index: nextSlideIndex,
+        animated: true,
+      });
+    } else {
+      // Son slide'da ise onboarding'i tamamla
+      handleGetStarted();
+    }
+  };
+
   const handleGetStarted = async () => {
-    // Onboarding'i tamamladığını AppNavigator'a bildir
+    // Sadece son slide'da onboarding'i tamamla
     if (onOnboardingComplete) {
       await onOnboardingComplete();
     }
@@ -204,7 +218,11 @@ const OnboardingScreen = ({navigation, onOnboardingComplete}) => {
       <View style={localStyles.buttonContainer}>
         <TouchableOpacity
           style={[localStyles.button, {backgroundColor: theme.colors.primary}]}
-          onPress={handleGetStarted}>
+          onPress={
+            currentIndex === onboardingData.length - 1
+              ? handleGetStarted
+              : goToNextSlide
+          }>
           <Text variant="button" color="#FFFFFF">
             {currentIndex === onboardingData.length - 1 ? 'Başla' : 'İleri'}
           </Text>

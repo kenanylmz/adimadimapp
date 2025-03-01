@@ -31,6 +31,12 @@
 - 📝 Nedeni: Nested navigator'lar arası navigasyon sorununu çözmek
 - 🎯 Sonuç: AppNavigator ile doğrudan iletişim kurarak state değişikliği yapma
 
+### Güncelleme 4
+
+- 🔄 Yapılan Değişiklik: Onboarding ileri butonu düzeltildi
+- 📝 Nedeni: İleri butonuna basıldığında bir sonraki slide'a geçmesi yerine direkt login ekranına gitme sorunu
+- 🎯 Sonuç: İleri butonuna basıldığında bir sonraki slide'a geçiş, sadece son slide'da başla butonuyla onboarding tamamlanıyor
+
 ## Özellikler
 
 - Kaydırılabilir slaytlar
@@ -49,3 +55,5 @@
 - Ekranlar arası geçişler için Animated API kullanıldı
 - onboardingData'da her slide için başlık, açıklama ve görsel bilgileri tanımlandı
 - İleride gerçek görseller eklenecek (şu an placeholder kullanılıyor)
+- İleri butonuna basıldığında FlatList programatik olarak slide'ları kaydırıyor
+- Sadece son slide'daki "Başla" butonu onboarding'i tamamlıyor

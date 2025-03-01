@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 
 const { width, height } = Dimensions.get('window');
 
-const LoginScreen = ({ navigation }) => {
+const LoginScreen = ({ navigation, setLoginStatus }) => {
   const { theme } = useTheme();
   const styles = getStyles(theme);
   const [email, setEmail] = useState('');
@@ -57,13 +57,25 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = () => {
     // İlerde Firebase ile entegre edilecek
     console.log('Login attempt with:', email, password);
-    navigation.navigate('Main'); // Giriş başarılı varsayıyoruz şimdilik
+    
+    // Login başarılı - AppNavigator'a bildir
+    if (setLoginStatus) {
+      setLoginStatus(true);
+    } else {
+      console.warn("setLoginStatus function is not available");
+    }
   };
 
   const handleGoogleLogin = () => {
     // İlerde Google Auth ile entegre edilecek
     console.log('Google login attempt');
-    navigation.navigate('Main');
+    
+    // Login başarılı - AppNavigator'a bildir
+    if (setLoginStatus) {
+      setLoginStatus(true);
+    } else {
+      console.warn("setLoginStatus function is not available");
+    }
   };
 
   return (
